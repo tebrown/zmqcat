@@ -11,7 +11,7 @@
 
 #include <zmq.h>
 
-#define SEND_BUFFER_SIZE 8192
+#define SEND_BUFFER_SIZE 102400
 
 void zmqcat_recv(void* socket, int type, int verbose) {
 
@@ -32,7 +32,7 @@ void zmqcat_recv(void* socket, int type, int verbose) {
 
 	// Read single message (all frames) and dump to stdout.
 	do {
-		ok = zmq_recv(socket, &msg, 0);
+		ok = zmq_msg_recv(socket, &msg, 0);
 		if (ok < 0) {
 			fprintf(stderr, "error %d: %s\n", errno, zmq_strerror(errno));
 			return;
@@ -103,7 +103,7 @@ void zmqcat_send(void* socket, int type, int verbose) {
 	if (verbose)
 		fprintf(stderr, "sending %ld bytes\n", total);
 
-	ok = zmq_send(socket, &msg, 0);
+	ok = zmq_msg_send(socket, &msg, 0);
 	if (ok < 0)
 		fprintf(stderr, "error %d: %s\n", errno, zmq_strerror(errno));
 
